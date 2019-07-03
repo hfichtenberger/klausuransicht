@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Klausuransicht</title>
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/bulma.css">
+		<script defer src="js/fontawesome.js"></script>
+		<script defer src="js/ckeditor.js"></script>
+		<script defer src="dart/main.dart.js"></script>
+	</head>
+	<body class="has-navbar-fixed-top">
+	<div id="preload" class="overlay">
+		<div class="lds-dual-ring"></div>
+	</div>
+	<nav id="navbar" class="navbar is-fixed-top is-hidden" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a id="burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+  			<span aria-hidden="true"></span>
+  			<span aria-hidden="true"></span>
+  			<span aria-hidden="true"></span>
+			</a>
+		</div>
+		<div id="menu" class="navbar-menu">
+			<div class="navbar-start">
+				<a id="button_config" class="navbar-item">
+					Konfiguration
+				</a>
+				<a id="button_hinweise" class="navbar-item">
+					Vor der Klausur
+				</a>
+				<a id="button_zeit" class="navbar-item">
+					Während der Klausur
+				</a>
+			</div>
+		</div>
+	</nav>
+	<main>
+		<div class="container is-hidden-tablet mobil_warning_outer">
+			<div class="section content">
+				<div class="notification is-warning">
+		  		<button id="mobil_warning" class="delete"></button>
+					Diese Website ist für die Projektion vorgesehen. Auf Mobilgeräten bzw. in der aktuellen Zoomstufe erscheint das Layout verändert.
+				</div>
+			</div>
+		</div>
+		<div id="part_config" class="is-hidden">
+			<div class="hero is-dark">
+				<div class="hero-body">
+					<div class="container">
+						<h1 class="title">Konfiguration</h1>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div class="section content">
+					<h2>Klausuransicht</h2>
+					<p>Diese Webseite stellt zwei Ansichten zur Verfügung, die vor beziehungsweise während der Klausur projiziert werden können. Der Wechsel erfolgt über das Menü am oberen Rand. Um die angezeigten Hinweise auf den Raum und die Klausur anzupassen, müssen im nächsten Abschnitt einige Parameter eingegeben und gegebenenfalls Texte entsprechend der Anleitung im übernächsten Abschnitt modifiziert werden.</p>
+					<div class="message">
+						<div class="message-body">
+							Die Größe kann mit <kbd>Strg</kbd>+<kbd>+</kbd> und <kbd>Strg</kbd>+<kbd>-</kbd> an den Projektor angepasst werden. Der Vollbildmodus wird mit <kbd>F11</kbd> aktiviert.
+						</div>
+					</div>
+					<h2>Anpassung der spezifischen Daten</h2>
+					<p>Der Inhalt der folgenden Textfelder wird an bestimmten Stellen in den Hinweisen eingefügt. Die in der „Während der Klausur“-Ansicht angezeigte Uhrzeit kann (und sollte) mit der Hörsaaluhr synchronisiert werden.</p>
+					<div class="field">
+						<label class="label">Name der Veranstaltung</label>
+						<div class="control">
+							<input id="inp_veranstaltungsname" class="input" type="text" placeholder="DAP2">
+						</div>
+						<div id="help_veranstaltungsname_hint" class="help is-hidden">
+							„Klausur <span id="help_veranstaltungsname_innerhint"></span>“
+						</div>
+						<div id="help_veranstaltungsname_isempty" class="help is-hidden">
+							Dieses Feld sollte ausgefüllt werden.
+						</div>
+					</div>
+					<div class="field">
+						<label class="label">Teilnehmerbereich dieses Raums</label>
+						<div class="control">
+							<input id="inp_teilnehmerbereich" class="input" type="text" placeholder="Matrikelnummer 100000-119999, Nachname A-K, ...">
+						</div>
+						<div id="help_teilnehmerbereich_hint" class="help is-hidden">
+							„In diesem Raum schreiben Teilnehmer mit <span id="help_teilnehmerbereich_innerhint"></span>“
+						</div>
+					</div>
+					<div class="columns">
+					<div class="column field">
+						<label class="label">Uhrzeit mit Hörsaaluhr synchronisieren</label>
+						<div class="field has-addons">
+							<div class="control">
+								<input id="time1" class="input" type="text" readonly>
+							</div>
+							<div class="control">
+								<a id="button_minmin" class="button">-1 Minute</a>
+							</div>
+							<div class="control">
+								<a id="button_ressec" class="button">Sekunden = 0</a>
+							</div>
+							<div class="control">
+								<a id="button_plumin" class="button">+1 Minute</a>
+							</div>
+						</div>
+					</div>
+					<div class="column field">
+						<label class="label">Visualisierung der verbleibenden Zeit</label>
+						<div class="control" style="margin-top: 15px;">
+							<input id="inp_countdown" class="switch" type="checkbox">
+							<label for="inp_countdown" class="label">Zeige Countdown</label>
+							<span style="display: inner-block; width: 1em;">&nbsp;</span>
+							<input id="inp_progressbar" class="switch" type="checkbox">
+							<label for="inp_progressbar" class="label">Zeige Fortschrittsbalken</label>
+						</div>
+					</div>
+      			    </div>
+					<h2>Anpassung der Hinweistexte</h2>
+					<p>Die angezeigten Hinweise in den Ansichten „Vor der Klausur“ und „Während der Klausur“ können durch Klicken auf den Text in der jeweiligen Ansicht direkt editiert werden. Unterhalb der Zeitanzeige befindet sich ein leeres Textfeld zur weiteren Verwendung. Die eventuell erscheinenden Korrekturhinweise der Rechtschreibprüfung lassen sich im Regelfall über das Kontextmenü deaktivieren.</p>
+					<p>Für die so individualisierte Klausuransicht lässt sich ein Link erzeugen, der beim Aufruf den geänderten Inhalt der Textfelder wiederherstellt. Es müssen dann nur noch die Felder oben ausgefüllt werden. Zur Verkürzung der generierten URL bieten sich <a href="https://de.wikipedia.org/wiki/Kurz-URL-Dienst">die gängigen Kurz-URL-Dienste</a> an.</p>
+					<div class="field has-addons">
+						<div class="control">
+							<a id="button_save" class="button is-primary">URL generieren</a>
+						</div>
+						<div class="control is-expanded">
+							<input id="save_url" class="input" type="text" readonly>
+						</div>
+					</div>
+				</div>
+				<footer class="footer">
+  					<div class="content has-text-centered">
+						<p>Klausuransicht – Version 1.0</p>
+						<p>
+							<a href="https://github.com/hfichtenberger/klausuransicht">
+								<span class="icon" style="font-size: 2em;">
+								<i class="fab fa-github"></i>
+								</span>
+							</a>
+						</p>
+					</div>
+				</footer>
+			</div>
+		</div>
+		<div id="part_live" class="is-hidden">
+			<div class="hero is-dark">
+				<div class="hero-body">
+					<div id="header_small" class="container">
+						<h1 class="title">Klausur <span id="txt_veranstaltungsname_1"></span></h1>
+					</div>
+					<div id="header_large" class="container is-hidden">
+						<h1 class="title">Klausur <span id="txt_veranstaltungsname_2"></span></h1>
+						<h2 id="teilnehmer_label" class="subtitle"> In diesem Raum schreiben Teilnehmer mit <span id="txt_teilnehmerbereich"></span></h2>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div class="section content">
+					<div class="columns">
+						<div id="part_live_vor" class="column ckeditor">
+							<h2>Vor der Klausur</h2>
+							<ul>
+								<li>Jede zweite Sitzreihe bleibt frei; lassen Sie zwei Plätze Abstand zwischen sich und Sitznachbarn; setzen Sie sich in eine Linie mit Teilnehmern vor und hinter Ihnen.</li>
+								<li>Mobiltelefone ausschalten</li>
+								<li>Taschen, Mobiltelefone und Armbanduhren müssen abgelegt werden.</li>
+								<li>Zur Bearbeitung sind erlaubt:
+									<ul>
+										<li>doppelseitig handbeschriebener A4-Zettel</li>
+										<li>dokumentenechter Stift (kein Füller, kein Bleistift, kein Tipp-Ex)</li>
+										<li>Lichtbildausweis (Pass, Personalausweis, Führerschein)</li>
+										<li>Studierendenausweis oder Immatrikulationsbescheinigung</li>
+										<li>sozialverträgliche Verpflegung</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						<div id="part_live_zeit" class="column">
+							<h2>Zeit</h2>
+							<p class="centered is-size-1">
+								<span class="icon" style="vertical-align: -0.12em;">
+									<i class="far fa-clock"></i>
+								</span>&nbsp;
+								<span id="time2"></span>
+							</p>
+							<p class="centered">
+								<span id="elem_countdown" class="is-size-2 is-hidden">…</span>
+								<progress id="elem_progressbar" class="progress" value="100" max="100"></progress>
+							</p>
+							<div class="field is-horizontal">
+								<div class="field-label is-large">
+									<label class="label">Beginn</label>
+								</div>
+								<div class="field-body">
+									<div class="field">
+										<div class="control">
+											<input id="inp_klausurbeginn" class="input is-large" type="text" placeholder="hh:mm">
+										</div>
+										<div id="help_klausurbeginn_invalidformat" class="help is-warning is-hidden">
+											Diese Eingabe muss das Format hh:mm haben
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="field is-horizontal">
+								<div class="field-label is-large">
+									<label class="label">Ende</label>
+								</div>
+								<div class="field-body">
+									<div class="field">
+										<div class="control">
+											<input id="inp_klausurende" class="input is-large" type="text" placeholder="hh:mm">
+										</div>
+										<div id="help_klausurende_invalidformat" class="help is-warning is-hidden">
+											Diese Eingabe muss das Format hh:mm haben
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="part_live_zeithinweis" class="ckeditor"></div>
+						</div>
+						<div id="part_live_waehrend" class="column ckeditor">
+							<h2>Während der Klausur</h2>
+							<ul>
+								<li>Prüfen Sie, ob Sie eine vollständige Klausur erhalten haben.</li>
+								<li>Schreiben Sie auf jedes Blatt Ihre Matrikelnummer.</li>
+								<li>Bis zum Abschluss der Identitätsprüfung und ab 15 Minuten vor Ende der Klausur ist das Verlassen des Hörsaals oder das Abgeben der Klausur nicht möglich.</li>
+								<li>Sie dürfen nur ausgegebenes Papier (inklusive der Rückseiten) verwenden. Zusatzseiten erhalten Sie bei der Aufsicht.</li>
+								<li>Täuschungsversuche und Störungen führen zum Ausschluss.</li>
+								<li>Es darf nur eine Person gleichzeitig die Toilette aufsuchen. Geben Sie Ihre Klausur bei der Aufsicht ab.</li>
+								<li>Bleiben Sie am Ende bitte sitzen, bis alle Klausuren gezählt sind.</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	</body>
+</html>
