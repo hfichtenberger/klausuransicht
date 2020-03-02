@@ -27,6 +27,7 @@ List<String> others = ['progressbar', 'countdown', 'klausurbeginn', 'klausurende
 List<String> necessary = [];
 List<String> recommended = ['veranstaltungsname'];
 Map<String, String> values = {};
+Map<String, JsObject> ckeditors = {};
 
 List<LIElement> zusatzhinweise = [];
 
@@ -38,10 +39,10 @@ var timecounter;
 var timediff = Duration();
 
 void main() {
-  // Load instance if provided
-  if (Uri.base.queryParameters.containsKey("txt")) {
-    load(Uri.base.queryParameters["txt"]);
-  }
+	// Load instance if provided
+	if (Uri.base.queryParameters.containsKey("txt")) {
+		loadPreInit(Uri.base.queryParameters["txt"]);
+	}
 
 	// Hook up events
 	for (String placeholder in placeholders) {
@@ -61,8 +62,9 @@ void main() {
 	querySelector('#button_minmin').onClick.listen(buttonMinMin);
 	querySelector('#button_ressec').onClick.listen(buttonResSec);
 	querySelector('#button_plumin').onClick.listen(buttonPluMin);
-  querySelector('#button_save').onClick.listen(buttonSave);
-  querySelector('#save_url').onClick.listen(inputSaveUrl);
+	querySelector('#button_save').onClick.listen(buttonSave);
+	querySelector('#button_load').onClick.listen(buttonLoad);
+	querySelector('#save_url').onClick.listen(inputSaveUrl);
 
 	querySelector('#burger').onClick.listen(burgerClick);
 	for (Element elem in querySelectorAll('.delete')) {
@@ -76,8 +78,9 @@ void main() {
   // Init CKEditor on .ckeditor elements
   var ckeditor = context['InlineEditor'];
 	for (Element elem in querySelectorAll('.ckeditor')) {
-		ckeditor.callMethod('create', [elem]);
-	}
+		ckeditor.callMethod('create', [elem])
+		        .callMethod('then', [(editor) => { ckeditors[elem.id] = editor }]);
+  }
 
 	// Set up clock
 	timecounter = Timer.periodic(Duration(seconds: 1), triggerTime);
@@ -297,27 +300,43 @@ void buttonPluMin(Event e) {
 
 void buttonSave(Event e) {
 	var storage = new HashMap<String,String>();
-  for (Element elem in querySelectorAll('.ckeditor')) {
-    storage[elem.id] = elem.innerHtml;
-  }
-  var suffix = "?txt=" + Uri.encodeComponent(utf8.fuse(base64).encode(jsonEncode(storage)));
-  if (Uri.base.isScheme("file")) {
-    (querySelector('#save_url') as InputElement).value = Uri.base.scheme + "://" + Uri.base.path + suffix;
-  } else {
-    (querySelector('#save_url') as InputElement).value = Uri.base.origin + Uri.base.path + suffix;
-  }
+	for (Element elem in querySelectorAll('.ckeditor')) {
+		//storage[elem.id] = elem.innerHtml;
+		storage[elem.id] = ckeditors[elem.id].callMethod('getData', []);
+	}
+	var suffix = "?txt=" + Uri.encodeComponent(utf8.fuse(base64).encode(jsonEncode(storage)));
+	if (Uri.base.isScheme("file")) {
+		(querySelector('#save_url') as InputElement).value = Uri.base.scheme + "://" + Uri.base.path + suffix;
+	} else {
+		(querySelector('#save_url') as InputElement).value = Uri.base.origin + Uri.base.path + suffix;
+	}
+}
+
+void buttonLoad(Event e) {
+	var url = (querySelector('#save_url') as InputElement).value;
+	var decoded = Uri.decodeComponent(url.substring(url.indexOf('?txt=') + 5));
+	loadPostInit(decoded);
 }
 
 void inputSaveUrl(Event e) {
-  TextInputElement elem = querySelector('#save_url');
-  elem.setSelectionRange(0, elem.value.length);
+	TextInputElement elem = querySelector('#save_url');
+	elem.setSelectionRange(0, elem.value.length);
 }
 
-void load(String encoding) {
-  var storage = jsonDecode(utf8.fuse(base64).decode(encoding));
-  for (Element elem in querySelectorAll('.ckeditor')) {
-    if(storage.containsKey(elem.id)) {
-      elem.innerHtml = storage[elem.id];
-    }
-  }
+void loadPreInit(String encoding) {
+	var storage = jsonDecode(utf8.fuse(base64).decode(encoding));
+	for (Element elem in querySelectorAll('.ckeditor')) {
+		if(storage.containsKey(elem.id)) {
+			elem.setInnerHtml(storage[elem.id]);
+		}
+	}
+}
+
+void loadPostInit(String encoding) {
+	var storage = jsonDecode(utf8.fuse(base64).decode(encoding));
+	for (Element elem in querySelectorAll('.ckeditor')) {
+		if(storage.containsKey(elem.id)) {
+			ckeditors[elem.id].callMethod('setData', [storage[elem.id]]);
+		}
+	}
 }

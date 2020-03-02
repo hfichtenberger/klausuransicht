@@ -1,15 +1,11 @@
 name: klausurscreen
 description: Projektion zur Verwendung während Klausuren
-# version: 1.0.0
-#homepage: https://www.example.com
-#author: Hendrik Fichtenberger <email@example.com>
+version: 1.0.1
+author: Hendrik Fichtenberger <oss@hendrik-fichtenberger.de>
 
 environment:
   sdk: '>=2.0.0 <3.0.0'
 
-#dependencies:
-#  path: ^1.4.1
-
 dev_dependencies:
-  build_runner: ^0.10.0
-  build_web_compilers: ^0.4.0
+  build_runner:
+  build_web_compilers:
