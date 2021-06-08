@@ -41,7 +41,7 @@ var timediff = Duration();
 void main() {
 	// Load instance if provided
 	if (Uri.base.queryParameters.containsKey("txt")) {
-		loadPreInit(Uri.base.queryParameters["txt"]);
+		load(Uri.base.queryParameters["txt"], true);
 	}
 
 	// Hook up events
@@ -300,6 +300,13 @@ void buttonPluMin(Event e) {
 
 void buttonSave(Event e) {
 	var storage = new HashMap<String,String>();
+	for (InputElement elem in querySelectorAll('input.save-marker')) {
+		if(elem.type == 'text') {
+			storage[elem.id] = elem.value;
+		} else if(elem.type == 'checkbox') {
+			storage[elem.id] = elem.checked ? "1" : "0";
+		}
+	}
 	for (Element elem in querySelectorAll('.ckeditor')) {
 		//storage[elem.id] = elem.innerHtml;
 		storage[elem.id] = ckeditors[elem.id].callMethod('getData', []);
@@ -315,7 +322,7 @@ void buttonSave(Event e) {
 void buttonLoad(Event e) {
 	var url = (querySelector('#save_url') as InputElement).value;
 	var decoded = Uri.decodeComponent(url.substring(url.indexOf('?txt=') + 5));
-	loadPostInit(decoded);
+	load(decoded, false);
 }
 
 void inputSaveUrl(Event e) {
@@ -323,20 +330,25 @@ void inputSaveUrl(Event e) {
 	elem.setSelectionRange(0, elem.value.length);
 }
 
-void loadPreInit(String encoding) {
+void load(String encoding, bool preInit) {
 	var storage = jsonDecode(utf8.fuse(base64).decode(encoding));
-	for (Element elem in querySelectorAll('.ckeditor')) {
+	for (InputElement elem in querySelectorAll('input.save-marker')) {
+		print(elem.type);
 		if(storage.containsKey(elem.id)) {
-			elem.setInnerHtml(storage[elem.id]);
+			if(elem.type == 'text') {
+				elem.value = storage[elem.id];
+			} else if(elem.type == 'checkbox') {
+				elem.checked = storage[elem.id] == "1" ? true : false;
+			}
 		}
 	}
-}
-
-void loadPostInit(String encoding) {
-	var storage = jsonDecode(utf8.fuse(base64).decode(encoding));
 	for (Element elem in querySelectorAll('.ckeditor')) {
 		if(storage.containsKey(elem.id)) {
-			ckeditors[elem.id].callMethod('setData', [storage[elem.id]]);
+			if(preInit) {
+				elem.setInnerHtml(storage[elem.id]);
+			} else {
+				ckeditors[elem.id].callMethod('setData', [storage[elem.id]]);
+			}
 		}
 	}
 }
