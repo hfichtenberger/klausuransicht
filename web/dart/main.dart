@@ -271,15 +271,23 @@ void buttonConfig(Event e) {
 void buttonHinweise(Event e) {
 	hide(querySelector('#part_config'));
 	unhide(querySelector('#part_live'));
-	hide(querySelector('#part_live_zeit'));
+
+	unhide(querySelector('#part_live_immer'));
 	unhide(querySelector('#part_live_vor'));
+	unhide(querySelector('#part_live_vor2'));
+	hide(querySelector('#part_live_zeit'));
+	hide(querySelector('#part_live_waehrend'));
 }
 
 void buttonZeit(Event e) {
 	hide(querySelector('#part_config'));
 	unhide(querySelector('#part_live'));
+
+	unhide(querySelector('#part_live_immer'));
 	hide(querySelector('#part_live_vor'));
+	hide(querySelector('#part_live_vor2'));
 	unhide(querySelector('#part_live_zeit'));
+	unhide(querySelector('#part_live_waehrend'));
 }
 
 void buttonMinMin(Event e) {

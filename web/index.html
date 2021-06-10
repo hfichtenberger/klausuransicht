@@ -10,11 +10,11 @@
 		<script defer src="js/ckeditor.js"></script>
 		<script defer src="dart/main.dart.js"></script>
 	</head>
-	<body class="has-navbar-fixed-top">
+	<body>
 	<div id="preload" class="overlay">
 		<div class="lds-dual-ring"></div>
 	</div>
-	<nav id="navbar" class="navbar is-fixed-top is-hidden" role="navigation" aria-label="main navigation">
+	<nav id="navbar" class="navbar is-hidden" role="navigation" aria-label="main navigation">
 		<div class="navbar-brand">
 			<a id="burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
   			<span aria-hidden="true"></span>
@@ -131,7 +131,7 @@
 				</div>
 				<footer class="footer">
   					<div class="content has-text-centered">
-						<p>Klausuransicht – Version 1.0</p>
+						<p>Klausuransicht – Version 1.1</p>
 						<p>
 							<a href="https://github.com/hfichtenberger/klausuransicht">
 								<span class="icon" style="font-size: 2em;">
@@ -146,67 +146,76 @@
 		<div id="part_live" class="is-hidden">
 			<div class="hero is-dark">
 				<div class="hero-body">
-					<div id="header_small" class="container">
+					<div id="header_small" class="container is-fluid">
 						<h1 class="title">Klausur <span id="txt_veranstaltungsname_1"></span></h1>
 					</div>
-					<div id="header_large" class="container is-hidden">
+					<div id="header_large" class="container is-hidden is-fluid">
 						<h1 class="title">Klausur <span id="txt_veranstaltungsname_2"></span></h1>
 						<h2 id="teilnehmer_label" class="subtitle"> In diesem Raum schreiben Teilnehmer mit <span id="txt_teilnehmerbereich"></span></h2>
 					</div>
 				</div>
 			</div>
-			<div class="container">
+			<div class="container is-fluid">
 				<div class="section content">
 					<div class="columns">
-						<div id="part_live_vor" class="column ckeditor">
-							[ hier Text einfügen: nur sichtbar in <em>Vor der Klausur</em> ]
-						</div>
-						<div id="part_live_zeit" class="column">
-							<h2>Zeit</h2>
-							<p class="centered is-size-1">
-								<span class="icon" style="vertical-align: -0.12em;">
-									<i class="far fa-clock"></i>
-								</span>&nbsp;
-								<span id="time2"></span>
-							</p>
-							<p class="centered">
-								<span id="elem_countdown" class="is-size-2 is-hidden">…</span>
-								<progress id="elem_progressbar" class="progress" value="100" max="100"></progress>
-							</p>
-							<div class="field is-horizontal">
-								<div class="field-label is-large">
-									<label class="label">Beginn</label>
-								</div>
-								<div class="field-body">
-									<div class="field">
-										<div class="control">
-											<input id="inp_klausurbeginn" class="input is-large" type="text" placeholder="hh:mm">
-										</div>
-										<div id="help_klausurbeginn_invalidformat" class="help is-warning is-hidden">
-											Diese Eingabe muss das Format hh:mm haben
+						<div class="column">
+							<div id="part_live_vor" class="ckeditor is-size-3">
+								[ hier Text einfügen: nur sichtbar in <em>Vor der Klausur</em> ]
+							</div>
+							<div id="part_live_zeit">
+								<p class="centered" style="font-size: 5rem;">
+									<span class="icon" style="vertical-align: -0.12em;">
+										<i class="far fa-clock"></i>
+									</span>&nbsp;
+									<span id="time2"></span>
+								</p>
+								<p class="centered">
+									<span id="elem_countdown" class="is-size-1 is-hidden">…</span>
+									<progress id="elem_progressbar" class="progress" value="100" max="100"></progress>
+								</p>
+								<div class="field is-horizontal">
+									<div class="field-label is-size-2">
+										<label class="label" style="min-width: 7em; margin-top: 0.5em;">Beginn</label>
+									</div>
+									<div class="field-body">
+										<div class="field">
+											<div class="control">
+												<input id="inp_klausurbeginn" class="input is-size-2" type="text" placeholder="hh:mm">
+											</div>
+											<div id="help_klausurbeginn_invalidformat" class="help is-warning is-hidden">
+												Diese Eingabe muss das Format hh:mm haben
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="field is-horizontal">
-								<div class="field-label is-large">
-									<label class="label">Ende</label>
-								</div>
-								<div class="field-body">
-									<div class="field">
-										<div class="control">
-											<input id="inp_klausurende" class="input is-large" type="text" placeholder="hh:mm">
-										</div>
-										<div id="help_klausurende_invalidformat" class="help is-warning is-hidden">
-											Diese Eingabe muss das Format hh:mm haben
+								<div class="field is-horizontal">
+									<div class="field-label is-size-2">
+										<label class="label" style="min-width: 7em; margin-top: 0.5em;">Ende</label>
+									</div>
+									<div class="field-body">
+										<div class="field">
+											<div class="control">
+												<input id="inp_klausurende" class="input is-size-2" type="text" placeholder="hh:mm">
+											</div>
+											<div id="help_klausurende_invalidformat" class="help is-warning is-hidden">
+												Diese Eingabe muss das Format hh:mm haben
+											</div>
 										</div>
 									</div>
 								</div>
+								<div id="part_live_zeithinweis" class="ckeditor is-size-3">[ hier Text einfügen: nur sichtbar in <em>Während der Klausur</em> ]</div>
 							</div>
-							<div id="part_live_zeithinweis" class="ckeditor">[ hier Text einfügen: nur sichtbar in <em>Während der Klausur</em> ]</div>
 						</div>
-						<div id="part_live_waehrend" class="column ckeditor">
-							[ hier Text einfügen: immer sichtbar ]
+						<div class="column">
+							<div id="part_live_immer" class="ckeditor is-size-3">
+								[ hier Text einfügen: immer sichtbar ]
+							</div>
+							<div id="part_live_vor2" class="ckeditor is-size-3">
+								[ hier Text einfügen: nur sichtbar in <em>Vor der Klausur</em> ]
+							</div>
+							<div id="part_live_waehrend" class="ckeditor is-size-3">
+								[ hier Text einfügen: nur sichtbar in <em>Während der Klausur</em> ]
+							</div>
 						</div>
 					</div>
 				</div>
