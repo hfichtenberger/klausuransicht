@@ -22,7 +22,7 @@ import 'dart:async';
 import 'dart:js';
 
 List<String> placeholders = ['veranstaltungsname', 'teilnehmerbereich'];
-List<String> others = ['progressbar', 'countdown', 'klausurbeginn', 'klausurende'];
+List<String> others = ['progressbar', 'countdown', 'klausurbeginn', 'klausurende', 'hint_always'];
 //List<String> selects = [];
 List<String> necessary = [];
 List<String> recommended = ['veranstaltungsname'];
@@ -154,6 +154,7 @@ void updateChange() {
 	bool progressbar_enabled = values['progressbar'] == 'true';
 	bool countdown_enabled = values['countdown'] == 'true';
 	bool times_enabled = progressbar_enabled || countdown_enabled;
+	bool show_hint_alwys = values['hint_always'] == 'true';
 
 	// Compute clock values
 	RegExp expr = new RegExp(r'(\d\d?):(\d\d?)');
@@ -180,6 +181,7 @@ void updateChange() {
 	setVisibility(querySelector('#header_large'), !values['teilnehmerbereich'].isEmpty);
 	setVisibility(querySelector('#elem_progressbar'), progressbar_enabled && validTimes);
 	setVisibility(querySelector('#elem_countdown'), countdown_enabled && validTimes);
+	setVisibility(querySelector('#part_live_immer'), show_hint_alwys);
 
 	// Show hints for empty inputs
 	var handleIsEmpty = (elements, hinttype) {
@@ -272,7 +274,6 @@ void buttonHinweise(Event e) {
 	hide(querySelector('#part_config'));
 	unhide(querySelector('#part_live'));
 
-	unhide(querySelector('#part_live_immer'));
 	unhide(querySelector('#part_live_vor'));
 	unhide(querySelector('#part_live_vor2'));
 	hide(querySelector('#part_live_zeit'));
@@ -283,7 +284,6 @@ void buttonZeit(Event e) {
 	hide(querySelector('#part_config'));
 	unhide(querySelector('#part_live'));
 
-	unhide(querySelector('#part_live_immer'));
 	hide(querySelector('#part_live_vor'));
 	hide(querySelector('#part_live_vor2'));
 	unhide(querySelector('#part_live_zeit'));
